@@ -8,14 +8,11 @@ const PORT = process.env.PORT || 3000;
 app.get('/run', (req, res) => {
     console.log('🔵 Received request to run Playwright');
 
-    // Run Playwright in the background
+    // Run Playwright **without sending a response**
     runPlaywright();
-
-    // ✅ Respond immediately
-    res.send(`✅ Playwright browser launched and ready for interaction`);
 });
 
 // ✅ Start Express Server
 app.listen(PORT, () => {
-    console.log(`🚀 Server running at: https://your-app-name.up.railway.app`);
+    console.log(`🚀 Server running at: http://localhost:${PORT}/run`);
 });
