@@ -1,7 +1,7 @@
-# Use Playwright’s base image for better compatibility
+# Use Playwright’s base image with necessary dependencies
 FROM mcr.microsoft.com/playwright:v1.40.0-focal
 
-# Update and install required GUI tools for VNC & NoVNC
+# Install required GUI tools for VNC & NoVNC
 RUN apt update && apt install -y \
     xvfb \
     x11vnc \
@@ -10,6 +10,9 @@ RUN apt update && apt install -y \
     websockify \
     tightvncserver && \
     rm -rf /var/lib/apt/lists/*
+
+# ✅ Verify x11vnc and websockify are installed
+RUN which x11vnc && which websockify
 
 # Set working directory
 WORKDIR /app
@@ -23,8 +26,8 @@ RUN chmod +x start.sh
 # Install Node.js dependencies
 RUN npm install
 
-# Expose NoVNC port
+# Expose necessary ports for NoVNC
 EXPOSE 6080
 
-# Start services when the container starts
+# Start all services
 CMD ["bash", "start.sh"]
