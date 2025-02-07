@@ -1,29 +1,30 @@
-# Use a Debian-based image with Node.js & Playwright
+# Use Playwright’s base image for better compatibility
 FROM mcr.microsoft.com/playwright:v1.40.0-focal
 
-# Install required GUI packages
+# Update and install required GUI tools for VNC & NoVNC
 RUN apt update && apt install -y \
     xvfb \
     x11vnc \
     fluxbox \
     novnc \
     websockify \
-    tightvncserver
+    tightvncserver && \
+    rm -rf /var/lib/apt/lists/*
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy project files
+# Copy all project files
 COPY . .
 
 # Ensure start.sh is executable
 RUN chmod +x start.sh
 
-# Install project dependencies
+# Install Node.js dependencies
 RUN npm install
 
-# Expose necessary ports
+# Expose NoVNC port
 EXPOSE 6080
 
-# Start all services
+# Start services when the container starts
 CMD ["bash", "start.sh"]
