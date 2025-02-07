@@ -1,33 +1,27 @@
 const express = require('express');
 const { exec } = require('child_process');
-const { runPlaywright } = require('./index.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.get('/run', (req, res) => {
-    console.log("🔵 Received request to start Playwright with browser access...");
-
-    // Start Playwright inside virtual display
-    runPlaywright();
-
-    // Start VNC Server (Expose GUI)
-    exec('x11vnc -display :99 -forever -nopw -rfbport 5900 &', (error) => {
-        if (error) console.error("❌ X11VNC Error:", error);
-    });
-
-    // Start NoVNC (Web Interface for Clients)
-    exec('websockify --web=/usr/share/novnc/ 6080 localhost:5900 &', (error) => {
-        if (error) console.error("❌ NoVNC Error:", error);
-    });
-
-    res.redirect('/vnc.html'); // Redirect user to browser interface
+// ✅ Health check endpoint
+app.get('/', (req, res) => {
+    res.send("✅ Server is running!");
 });
 
-// Serve NoVNC Web Interface
-app.use(express.static('/usr/share/novnc'));
+// ✅ Start NoVNC and VNC services
+app.get('/run', (req, res) => {
+    console.log("🔵 Received request to start Playwright with GUI...");
 
+    exec('Xvfb :99 -screen 0 1920x1080x24 &', () => console.log("✅ Xvfb Started"));
+    exec('x11vnc -display :99 -forever -nopw -rfbport 5900 &', () => console.log("✅ X11VNC Started"));
+    exec('websockify --web=/usr/share/novnc/ 6080 localhost:5900 &', () => console.log("✅ NoVNC Started"));
+
+    res.redirect('/vnc.html'); // Redirect user to browser UI
+});
+
+// ✅ Start Express Server
 app.listen(PORT, () => {
-    console.log(`🚀 Server running at: http://localhost:${PORT}/run`);
-    console.log(`🖥️  Access the browser at: http://localhost:6080/vnc.html`);
+    console.log(`🚀 Server running at: http://localhost:${PORT}/`);
+    console.log(`🖥️  VNC UI available at: http://localhost:6080/vnc.html`);
 });
