@@ -18,9 +18,9 @@ async function runPlaywright() {
 
         // ✅ Extract and return the page title
         const title = await page.title();
-        console.log(`✅ Page Loaded: ${title}`);
+        // console.log(`✅ Page Loaded: ${title}`);
 
-        await browser.close();
+        // await browser.close();
         return title; // Return page title
     } catch (error) {
         console.error('❌ Error running Playwright:', error);
