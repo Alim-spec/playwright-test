@@ -1,7 +1,7 @@
 # Use Playwright’s base image with necessary dependencies
 FROM mcr.microsoft.com/playwright:v1.40.0-focal
 
-# Install required GUI tools for VNC & NoVNC
+# Update package list and install GUI tools
 RUN apt update && apt install -y \
     xvfb \
     x11vnc \
@@ -11,7 +11,7 @@ RUN apt update && apt install -y \
     tightvncserver && \
     rm -rf /var/lib/apt/lists/*
 
-# ✅ Verify x11vnc and websockify are installed
+# ✅ Ensure `x11vnc` and `websockify` exist
 RUN which x11vnc && which websockify
 
 # Set working directory
@@ -20,14 +20,14 @@ WORKDIR /app
 # Copy all project files
 COPY . .
 
-# Ensure start.sh is executable
+# Ensure `start.sh` is executable
 RUN chmod +x start.sh
 
 # Install Node.js dependencies
 RUN npm install
 
-# Expose necessary ports for NoVNC
+# Expose necessary ports
 EXPOSE 6080
 
 # Start all services
-CMD ["bash", "start.sh"]
+CMD [
