@@ -1,15 +1,14 @@
 {
-    "name": "playwright-server",
-    "version": "1.0.0",
-    "description": "A Playwright script running on Railway",
-    "main": "server.js",
-    "scripts": {
-      "start": "node server.js",
-      "postinstall": "npx playwright install --with-deps"
-    },
-    "dependencies": {
-      "express": "^4.18.2",
-      "playwright": "^1.40.0"
-    }
+  "name": "playwright-novnc",
+  "version": "1.0.0",
+  "description": "Run Playwright inside a browser using NoVNC on Railway",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "postinstall": "npx playwright install --with-deps && apt update && apt install -y xvfb x11vnc fluxbox novnc websockify tightvncserver && chmod +x start.sh && ./start.sh"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "playwright": "^1.40.0"
   }
-  
+}
