@@ -2,31 +2,19 @@ const { chromium } = require('playwright');
 
 async function runPlaywright() {
     try {
-        // ✅ Launch Playwright browser in headless mode
-        const browser = await chromium.launch({
-            headless: true, // Runs without UI
-            args: ['--no-sandbox', '--disable-setuid-sandbox'] // Needed for cloud environments like Railway
-        });
+        // ✅ Connect to a remote browser instance (e.g., Browserless.io)
+        const browser = await chromium.connectOverCDP('wss://chrome.browserless.io/');
 
         const page = await browser.newPage();
+        console.log('🌐 Opening Jusan Bank for user interaction...');
 
-        console.log('🌐 Navigating to Jusan Bank...');
         await page.goto('https://ib.jusan.kz/');
 
-        // ✅ Wait for the page to fully load
-        //await page.waitForLoadState('load');
-        await page.waitForTimeout(1000);
-        // ✅ Extract and return the page title
-        //const title = await page.title();
-        //console.log(`✅ Page Loaded: ${title}`);
-
-        await browser.close();
-        //return title; // Return page title
+        // ✅ Keep the browser open for interaction
+        console.log('✅ Browser is open and interactive');
     } catch (error) {
         console.error('❌ Error running Playwright:', error);
-        return `Error: ${error.message}`;
     }
 }
 
 module.exports = { runPlaywright };
-
