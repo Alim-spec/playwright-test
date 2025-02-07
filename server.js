@@ -4,19 +4,18 @@ const { runPlaywright } = require('./index.js'); // Import Playwright function
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ✅ API Route to trigger Playwright
-app.get('/run', async (req, res) => {
+// ✅ API Route that triggers Playwright but responds immediately
+app.get('/run', (req, res) => {
     console.log('🔵 Received request to run Playwright');
-    try {
-        const title = await runPlaywright();
-        res.send(`✅ Page Title: ${title}`);
-    } catch (error) {
-        res.status(500).send(`❌ Error: ${error.message}`);
-    }
+
+    // Run Playwright in the background (no `await`)
+    runPlaywright();
+
+    // ✅ Immediately send response without waiting
+    res.send(`✅ Playwright started in the background`);
 });
 
-// ✅ Start Express Server
+// ✅ Start Express server
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🚀 Server running at: https://your-app-name.up.railway.app`);
 });
-

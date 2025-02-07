@@ -14,14 +14,14 @@ async function runPlaywright() {
         await page.goto('https://ib.jusan.kz/');
 
         // ✅ Wait for the page to fully load
-        await page.waitForLoadState('load');
-
+        //await page.waitForLoadState('load');
+        await page.waitForTimeout(1000);
         // ✅ Extract and return the page title
-        const title = await page.title();
-        // console.log(`✅ Page Loaded: ${title}`);
+        //const title = await page.title();
+        //console.log(`✅ Page Loaded: ${title}`);
 
-        // await browser.close();
-        return title; // Return page title
+        await browser.close();
+        //return title; // Return page title
     } catch (error) {
         console.error('❌ Error running Playwright:', error);
         return `Error: ${error.message}`;
